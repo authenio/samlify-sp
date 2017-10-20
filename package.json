@@ -17,8 +17,8 @@
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
     "jsonwebtoken": "^7.4.3",
-    "next": "^2.4.9",
-    "react": "^15.6.1",
+    "next": "^4.1.2",
+    "react": "^16.0.0",
     "react-dom": "^15.6.1",
     "samlify": "^2.2.0"
   }
