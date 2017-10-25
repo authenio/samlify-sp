@@ -1,15 +1,14 @@
 {
   "name": "samlify-sp",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An example repository of service provider powered by Next and samlify",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "next build",
     "dev": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "passify",
   "license": "MIT",
   "dependencies": {
     "antd": "^2.12.6",
@@ -19,7 +18,7 @@
     "jsonwebtoken": "^7.4.3",
     "next": "^4.1.2",
     "react": "^16.0.0",
-    "react-dom": "^15.6.1",
-    "samlify": "^2.2.0"
+    "react-dom": "^16.0.0",
+    "samlify": "^2.3.4"
   }
 }
