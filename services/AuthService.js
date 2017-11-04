@@ -1,52 +1,39 @@
 // https://github.com/zeit/next.js/issues/153
+import axios from 'axios';
 
 export default class AuthService {
 
-  constructor(domain) {
+  constructor(ctx) {
     this.domain = process.env.API_URL || 'http://localhost:3000';
+    this.setAuth(ctx);
   }
 
-  login(username, password) {
-    return this.fetch(`${this.domain}/auth`, {
-      method: 'POST',
-      body: JSON.stringify({ username, password })
-    }).then(res => {
-      const { token, profile } = res;
-      this.setToken(token);
-      this.setProfile(profile);
-      return Promise.resolve(res);
-    });
+  async login(username, password) {
+    const token = await axios.post(`${this.domain}/auth`, { username, password }).then(e => e.data);
+    await this.setAuth(token);
   }
 
   loggedIn() {
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token);
+    const token = AuthService.getAuth();
+    return !!token;
   }
 
-  isTokenExpired(token) {
-    return false; // TODO
+  static getAuth() {
+    const token = localStorage.getItem('token') || '';
+    return token ? token : '';
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  setAuth(token) {
+    if (token) {
+      localStorage.setItem('token', token);
+    }
   }
 
-  getProfile() {
-    return localStorage.getItem('profile');
-  }
-
-  setToken(token) {
-    localStorage.setItem('token', token);
-  }
-
-  setProfile(profile) {
-    localStorage.setItem('profile', JSON.stringify(profile));
-  }
-
-  logout() {
+  async logout() {
+    // remove auth in localstorage
     localStorage.removeItem('token');
-    localStorage.removeItem('profile');
-    return Promise.resolve(true);
+    // remove auth in cookie
+    await axios.get(`/logout`);
   }
 
   checkStatus(resp) {
@@ -67,7 +54,7 @@ export default class AuthService {
     };
 
     if (this.loggedIn()) {
-      headers['Authorizatoin'] = `Bearer ${this.getToken()}`;
+      headers['Authorization'] = `Bearer ${AuthService.getAuth()}`;
     }
 
     return fetch(url, {

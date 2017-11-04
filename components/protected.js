@@ -3,43 +3,42 @@ import Router from 'next/router';
 import AuthService from '../services/AuthService';
 import { Button } from 'antd';
 import Page from '../layouts/main';
+import cookies from 'next-cookies';
 
 export default function markProtected(AuthComponent) {
   
-  const auth = new AuthService();
-
   return class Protected extends Component {
+
+    authService = null;
 
     constructor(props) {
       super(props);
-      this.state = {
-        isLoading: true
-      };
+      this.authService = new AuthService(props.token);
+    }
+
+    static async getInitialProps(ctx) {
+      if (ctx.req) {
+        const cookie = cookies(ctx);
+        return cookie ? { token: cookie.token } : {};
+      } 
+      return { token: AuthService.getAuth() };
     }
 
     componentDidMount() {
-      if (!auth.loggedIn()) {
-        // TODO add flash message for unauthorized access
-        Router.push('/');
+      if (!this.authService.loggedIn()) {
+        Router.push('/login');
       }
-      this.setState({ isLoading: false });
     }
 
-    logout() {
-      auth.logout().then(res => {
-        Router.push('/');
-      });
+    async logout() {
+      await this.authService.logout();
+      Router.push('/');
     }
 
     render() {
-      const isLoading = this.state.isLoading;
       return (
         <Page>
-          { 
-            isLoading ? 
-            <div>Loading...</div> :
-            <AuthComponent {...this.props} auth={auth} />
-          }
+          <AuthComponent {...this.props} />
           <Button onClick={() => this.logout()}>Logout</Button>
         </Page>
       );

@@ -3,9 +3,11 @@ import Page from '../layouts/main';
 
 export default () => (
   <Page>
-    <h1>
-      Samlify  
-    </h1>
-    <Link href="/login"><a>Login</a></Link>
+    <div className="tc mt5 mb5">
+      <h1>Samlify Service Provider</h1>
+      <div className="mb3">
+        <Link href="/login">Credential Login</Link>
+      </div>
+    </div>
   </Page>
 )
