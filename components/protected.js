@@ -3,44 +3,64 @@ import Router from 'next/router';
 import AuthService from '../services/AuthService';
 import { Button } from 'antd';
 import Page from '../layouts/main';
+import cookies from 'next-cookies';
+
+const jwtDecode = require('jwt-decode');
 
 export default function markProtected(AuthComponent) {
   
-  const auth = new AuthService();
-
   return class Protected extends Component {
+
+    authService = null;
 
     constructor(props) {
       super(props);
-      this.state = {
-        isLoading: true
-      };
+      this.authService = new AuthService(props.token);
+    }
+
+    static async getInitialProps(ctx) {
+      let token = null;
+      let profile = null;
+      if (ctx.req) {
+        // run in server side
+        const cookie = cookies(ctx);
+        token = cookie ? cookie.token : '';
+      } else {
+        // run in client side
+        token = AuthService.getAuth();
+      }
+      if (token) {
+        try {
+          profile = jwtDecode(token);
+        } catch (e) {
+          console.error('ERROR_PROFILE_PARSE', e)
+        }
+      }
+      return { token, profile };
     }
 
     componentDidMount() {
-      if (!auth.loggedIn()) {
-        // TODO add flash message for unauthorized access
-        Router.push('/');
+      if (!this.authService.loggedIn()) {
+        Router.push('/login');
       }
-      this.setState({ isLoading: false });
     }
 
-    logout() {
-      auth.logout().then(res => {
-        Router.push('/');
-      });
+    async logout() {
+      await this.authService.logout();
+      Router.push('/');
     }
 
     render() {
-      const isLoading = this.state.isLoading;
       return (
         <Page>
-          { 
-            isLoading ? 
-            <div>Loading...</div> :
-            <AuthComponent {...this.props} auth={auth} />
-          }
-          <Button onClick={() => this.logout()}>Logout</Button>
+          <header className="pa3 f6 shadow-1">
+            <span>Welcome you back!</span>
+            <span className="fr">
+              {this.props.profile.login}
+              <a className="pl3" onClick={() => this.logout()}>Logout</a>
+            </span>
+          </header>
+          <AuthComponent {...this.props} />
         </Page>
       );
     }
