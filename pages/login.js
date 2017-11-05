@@ -11,7 +11,7 @@ export default class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { username: 'hellosamlify', password: 'password' };
+    this.state = { username: 'samuel', password: 'password' };
   }
 
   handleChange(e) {

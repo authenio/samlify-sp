@@ -2,15 +2,15 @@
 
 const profile = {
   'hellosamlify': {
-    firstName: 'Admin',
-    lastName: 'Samlify',
-    login: 'hellosamlify',
-    email: 'hello@samlify.com'
+    firstName: 'Samuel',
+    lastName: 'Saml',
+    login: 'samuel',
+    email: 'samuel@samlify.com'
   }
 };
 
 module.exports.getProfileByLogin = function (login) {
-  if (!profile[login]) {
+ if (!profile[login]) {
     return undefined;
   }
   return profile[login];
