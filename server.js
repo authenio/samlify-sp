@@ -22,14 +22,6 @@ app.prepare().then(() => {
   server.set('x-powered-by', false);
   server.set('trust proxy', true);
 
-  // server.use(jwt({
-  //   secret,
-  //   exp: Math.floor(Date.now() / 1000) + (60*60*6),
-  //   issuer: 'http://passify.io' 
-  // }).unless({ 
-  //   path: ['/', /_next\/*/, '/auth', '/login', '/board', '/sp', '/logout']
-  // }));
-
   server.get('/', (req, res) => {
     return app.render(req, res, '/');
   });
@@ -62,8 +54,7 @@ app.prepare().then(() => {
     const profile = user.getProfileByLogin(req.body.username);
     if (profile) {
       const token = jsonwebtoken.sign(JSON.stringify(profile), secret);
-      // construct the cookie auth
-      // set cookie
+      // set cookie and return the result
       return res
         .cookie('token', token, {
           domain: req.hostname,
@@ -75,8 +66,12 @@ app.prepare().then(() => {
         })
         .json(token);
     }
-    return res.status(401).send('invalid email or password');
+    return res.status(401).send('ERROR_SERVER_INVALID_CREDENTIAL');
   });
+
+  // endpoints for sso 
+
+  // listen and kickstart the server
 
   server.listen(port, (err) => {
     if (err) throw err;

@@ -4,7 +4,6 @@ import AuthService from '../services/AuthService';
 import { Button } from 'antd';
 import Page from '../layouts/main';
 import cookies from 'next-cookies';
-
 const jwtDecode = require('jwt-decode');
 
 export default function markProtected(AuthComponent) {
@@ -40,7 +39,7 @@ export default function markProtected(AuthComponent) {
     }
 
     componentDidMount() {
-      if (!this.authService.loggedIn()) {
+      if (!this.authService.loggedIn() || !this.props.profile) {
         Router.push('/login');
       }
     }
@@ -54,9 +53,9 @@ export default function markProtected(AuthComponent) {
       return (
         <Page>
           <header className="pa3 f6 shadow-1">
-            <span>Welcome you back!</span>
+            <span>Welcome back!</span>
             <span className="fr">
-              {this.props.profile.login}
+              {this.props.profile && this.props.profile.login}
               <a className="pl3" onClick={() => this.logout()}>Logout</a>
             </span>
           </header>
