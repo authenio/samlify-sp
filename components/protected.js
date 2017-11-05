@@ -59,7 +59,7 @@ export default function markProtected(AuthComponent) {
               <a className="pl3" onClick={() => this.logout()}>Logout</a>
             </span>
           </header>
-          <AuthComponent {...this.props} />
+          <AuthComponent {...this.props} authService={this.authService} />
         </Page>
       );
     }

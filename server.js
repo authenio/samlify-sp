@@ -5,17 +5,18 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const jsonwebtoken = require('jsonwebtoken');
 const user = require('./user');
+const samlify = require('samlify');
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
 
-
 app.prepare().then(() => {
 
   const server = express();
   const secret = 'wd65InkKwGl5RfzRMjQB9H34Kk9sd6Sa';
+  let dynamicServiceProvider = null;
 
   server.use(bodyParser.json())
   server.use(cookieParser());
@@ -67,6 +68,14 @@ app.prepare().then(() => {
         .json(token);
     }
     return res.status(401).send('ERROR_SERVER_INVALID_CREDENTIAL');
+  });
+
+  // endpoints for constructing service provider in run time
+
+  server.post('/sp/edit', (req, res) => {
+    // re-create a new service provider
+    dynamicServiceProvider = new samlify.ServiceProvider(req.body.config);
+    res.json({ success: true });
   });
 
   // endpoints for sso 
