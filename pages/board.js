@@ -51,10 +51,12 @@ class Board extends Component {
     return {};
   }
 
-  save() {
+  async save() {
+    const config = JSON.stringify(this.state.formData);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('spconfig', JSON.stringify(this.state.formData));
+      localStorage.setItem('spconfig', config);
     }
+    await this.props.authService.fetch('/sp/edit', { method: 'POST', body: { config } });
   }
 
   handleFormChange(e, field) {
