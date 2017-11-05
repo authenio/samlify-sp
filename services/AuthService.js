@@ -24,7 +24,7 @@ export default class AuthService {
   }
 
   setAuth(token) {
-    if (token) {
+    if (typeof window !== 'undefined' && token) {
       localStorage.setItem('token', token);
     }
   }
