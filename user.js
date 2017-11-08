@@ -1,7 +1,7 @@
 /* fake user */
 
 const profile = {
-  'hellosamlify': {
+  'samuel': {
     firstName: 'Samuel',
     lastName: 'Saml',
     login: 'samuel',

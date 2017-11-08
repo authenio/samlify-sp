@@ -47,10 +47,13 @@ app.prepare().then(() => {
     return app.render(req, res, '/sp');
   });
 
-  server.get('*', (req, res) => {
-    return handle(req, res)
+  server.get('/metadata', (req, res) => {
+    if (dynamicServiceProvider) {
+      return res.header('Content-Type', 'text/xml').send(dynamicServiceProvider.getMetadata());
+    }
+    return res.status(400).send('ERROR_SERVER_SP_MISCONFIG');
   });
-
+  
   server.post('/auth', (req, res) => {
     const profile = user.getProfileByLogin(req.body.username);
     if (profile) {
@@ -81,6 +84,10 @@ app.prepare().then(() => {
   // endpoints for sso 
 
   // listen and kickstart the server
+
+  server.get('*', (req, res) => {
+    return handle(req, res)
+  });
 
   server.listen(port, (err) => {
     if (err) throw err;

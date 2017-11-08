@@ -1,6 +1,7 @@
 /* This page is a protected page */
 
 import React, { Component } from 'react';
+import Router from 'next/router'; 
 import Link from 'next/link';
 import markProtected from '../components/protected';
 import { Row, Col } from 'antd';
@@ -59,6 +60,10 @@ class Board extends Component {
     await this.props.authService.fetch('/sp/edit', { method: 'POST', body: { config } });
   }
 
+  getMetadata() {
+    window.open('/metadata');
+  }
+
   handleFormChange(e, field) {
     console.log(e.target.value, e.target.name, field);
     this.setState({
@@ -100,7 +105,7 @@ class Board extends Component {
         <div className="mt4 ml4 mr4 mb4 tc">
           <div className="mt3 mb5">
             <Button className="mr3" onClick={() => this.save()}>Save</Button>
-            <Button className="mr3" disabled onClick={() => {}}>Metadata</Button>
+            <Button className="mr3" onClick={() => this.getMetadata()}>Metadata</Button>
             <Button className="mr3" disabled onClick={() => {}}>Export</Button>
             <Button className="mr3" disabled onClick={() => {}}>Import</Button>
           </div>
