@@ -4592,9 +4592,9 @@ safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
-samlify@2.3.5:
-  version "2.3.5"
-  resolved "https://registry.yarnpkg.com/samlify/-/samlify-2.3.5.tgz#88591e9b55180dfafc0ca7f3aba59c791d9b2c07"
+samlify@2.3.6:
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/samlify/-/samlify-2.3.6.tgz#b110a558e9aae0bcce93aee517f3531a21c38e34"
   dependencies:
     "@types/camelcase" "^0.0.30"
     "@types/lodash" "^4.14.37"
